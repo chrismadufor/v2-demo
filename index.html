@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paystack v2 Inline Demo</title>
+
+    <!-- Paystack Inline v2 Script -->
+    <script src="https://js.paystack.co/v2/inline.js"></script>
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0d0d1a;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #e2e8f0;
+        }
+
+        .card {
+            background: #13132b;
+            border: 1px solid #2d2d5e;
+            border-radius: 16px;
+            padding: 40px 44px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+
+        .logo svg {
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+
+        .subtitle {
+            font-size: 0.88rem;
+            color: #7b8db0;
+            margin-bottom: 32px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #0d0d1a;
+            border: 1.5px solid #2d2d5e;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.04em;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: #6366f1;
+        }
+
+        input::placeholder {
+            color: #3d4a6a;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            background: #0d0d1a;
+            border: 1.5px solid #2d2d5e;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+            cursor: pointer;
+            appearance: auto;
+        }
+
+        select:focus {
+            border-color: #6366f1;
+        }
+
+        .hint {
+            font-size: 0.78rem;
+            color: #4a5a80;
+            margin-top: 5px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.97rem;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.02em;
+            transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+            margin-top: 8px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.45);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-box {
+            margin-top: 24px;
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .status-box.info {
+            background: #1e2a4a;
+            border: 1px solid #3b4f7a;
+            color: #93c5fd;
+        }
+
+        .status-box.success {
+            background: #0f2d1f;
+            border: 1px solid #166534;
+            color: #86efac;
+        }
+
+        .status-box.error {
+            background: #2d0f0f;
+            border: 1px solid #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .status-box.show {
+            display: block;
+        }
+
+        .status-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            opacity: 0.7;
+            margin-bottom: 4px;
+        }
+
+        pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: 6px;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #1e2a45;
+            margin: 28px 0;
+        }
+
+        .doc-link {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #4a5a80;
+        }
+
+        .doc-link a {
+            color: #7c7cf5;
+            text-decoration: none;
+        }
+
+        .doc-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <!-- Logo -->
+        <div class="logo">
+            <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                <rect width="40" height="40" rx="10" fill="#6366f1" />
+                <path d="M10 20 Q20 8 30 20 Q20 32 10 20Z" fill="#fff" opacity="0.9" />
+            </svg>
+            <span class="logo-text">Paystack v2 Inline</span>
+        </div>
+
+        <h1>Resume Transaction</h1>
+        <p class="subtitle">Enter a valid <code>access_code</code> to open the Paystack checkout popup.</p>
+
+        <div class="field">
+            <label for="method-selector">Method</label>
+            <select id="method-selector">
+                <option value="resumeTransaction">resumeTransaction</option>
+                <option value="checkout">checkout</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="access-code">Access Code</label>
+            <input id="access-code" type="text" placeholder="e.g. 0peioxfhpn" value="ACCESS_CODE_HERE"
+                spellcheck="false" autocomplete="off" />
+            <p class="hint">Replace the value above with a valid <strong>access_code</strong> from a transaction you
+                initialised via the Paystack API.</p>
+        </div>
+
+        <button class="btn" id="pay-btn" onclick="resumePayment()">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            Open Checkout
+        </button>
+
+        <div id="status-box" class="status-box">
+            <div class="status-label" id="status-label">Info</div>
+            <pre id="status-msg"></pre>
+        </div>
+
+        <hr class="divider" />
+        <p class="doc-link">
+            <a href="https://paystack.com/docs/payments/accept-payments/#popup" target="_blank" rel="noopener">
+                Paystack Inline v2 Docs ↗
+            </a>
+        </p>
+    </div>
+
+    <script>
+        function showStatus(type, label, message) {
+            const box = document.getElementById('status-box');
+            const lbl = document.getElementById('status-label');
+            const msg = document.getElementById('status-msg');
+
+            box.className = 'status-box show ' + type;
+            lbl.textContent = label;
+            msg.textContent = typeof message === 'object'
+                ? JSON.stringify(message, null, 2)
+                : message;
+        }
+
+        async function resumePayment() {
+            const accessCode = document.getElementById('access-code').value.trim();
+            const method = document.getElementById('method-selector').value;
+
+            if (!accessCode || accessCode === 'ACCESS_CODE_HERE') {
+                showStatus('error', 'Missing Access Code', 'Please enter a valid access_code before proceeding.');
+                return;
+            }
+
+            showStatus('info', 'Loading…', `Opening Paystack checkout using ${method} with access_code: ` + accessCode);
+
+            const paystack = new PaystackPop();
+
+            const callbacks = {
+                onSuccess: function (transaction) {
+                    console.log('✅ Payment successful:', transaction);
+                    showStatus(
+                        'success',
+                        '✅ Payment Successful',
+                        transaction
+                    );
+                },
+
+                onLoad: function (response) {
+                    console.log('📦 Checkout loaded:', response);
+                    showStatus('info', '📦 Checkout Loaded', response);
+                },
+
+                onCancel: function () {
+                    console.log('❌ Payment cancelled by user.');
+                    showStatus('error', '❌ Cancelled', 'The payment was cancelled by the user.');
+                },
+
+                onError: function (error) {
+                    console.error('⚠️ Payment error:', error);
+                    showStatus('error', '⚠️ Error', error);
+                },
+            };
+
+            try {
+                if (method === 'checkout') {
+                    // Checkout is asynchronous
+                    await paystack.checkout({
+                        // key: 'pk_test_9a9c79e3945ae480ebc43a28bf4ae856d5b97287',
+                        key: 'pk_live_fb89c3a0d760e4ce9a532ae11ad7a1fd4807872f',
+                        email: 'sample@email.com',
+                        amount: 23400,
+                        // accessCode: accessCode,
+                        ...callbacks
+                    });
+                } else {
+                    // Resume transaction is instant
+                    paystack.resumeTransaction(accessCode, callbacks);
+                }
+            } catch (err) {
+                console.error('⚠️ Execution error:', err);
+                showStatus('error', '⚠️ Execution Error', err.message || err);
+            }
+        }
+
+        // Auto-trigger on page load if a real access_code is set
+        window.addEventListener('DOMContentLoaded', function () {
+            const accessCode = document.getElementById('access-code').value.trim();
+            if (accessCode && accessCode !== 'ACCESS_CODE_HERE') {
+                resumePayment();
+            }
+        });
+    </script>
+</body>
+
+</html>
